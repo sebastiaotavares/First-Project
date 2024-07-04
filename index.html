@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Dados METAR - RedeMET</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #consulta-form {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #consulta-form label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        #consulta-form input[type="text"],
+        #consulta-form select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        #consulta-form button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #consulta-form button:hover {
+            background-color: #45a049;
+        }
+
+        #resultado-api {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #resultado-api p {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        #resultado-api pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        #resultado-api .erro {
+            color: #f00;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Consulta de Dados METAR - RedeMET</h1>
+
+    <form id="consulta-form">
+        <label for="local">Código do Local (ICAO):</label>
+        <input type="text" id="local" name="local" value="sbbr" required>
+        <br><br>
+        <label for="msg">Tipo de Mensagem:</label>
+        <select id="msg" name="msg">
+            <option value="metar" selected>METAR</option>
+            <option value="taf">TAF</option>
+        </select>
+        <br><br>
+        <button type="submit">Consultar</button>
+    </form>
+
+    <div id="resultado-api">
+        <!-- Aqui serão exibidos os dados da API -->
+    </div>
+
+    <script>
+        const form = document.getElementById('consulta-form');
+        const resultadoApi = document.getElementById('resultado-api');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            const local = formData.get('local');
+            const msg = formData.get('msg');
+
+            const apiUrl = `https://redemet.decea.gov.br//api/consulta_automatica/index.php?local=${local}&msg=${msg}&saida_html=sim&api_key=OVbnM4U9GLsHrQAoZO5PrcgsJkLWYMoZUt5jaInG`;
+
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Não foi possível carregar os dados da API');
+                    }
+                    return response.text(); // A API retorna um HTML, então usamos response.text() para ler o conteúdo como texto
+                })
+                .then(data => {
+                    resultadoApi.innerHTML = data;
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar os dados da API:', error);
+                    resultadoApi.innerHTML = `<p class="erro">Erro ao carregar os dados da API. Detalhes: ${error.message}</p>`;
+                });
+        });
+    </script>
+</body>
+</html>

@@ -90,12 +90,14 @@
 
     <form id="consulta-form">
         <label for="local">Código do Local (ICAO):</label>
-        <input type="text" id="local" name="local" value="sbbr" required>
+        <input type="text" id="local" name="local" value="" required>
         <br><br>
         <label for="msg">Tipo de Mensagem:</label>
         <select id="msg" name="msg">
             <option value="metar" selected>METAR</option>
             <option value="taf">TAF</option>
+            <option value="airmet">AIRMET</option>
+            <option value="sigmet">SIGMET</option>
         </select>
         <br><br>
         <button type="submit">Consultar</button>

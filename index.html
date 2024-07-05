@@ -90,6 +90,17 @@
             font-weight: bold;
         }
     </style>
+<!-- DEIXA LETRA DIGITADA EM CAIXA ALTA -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var icaoInput = document.getElementById('local');
+        
+        icaoInput.addEventListener('input', function() {
+            this.value = this.value.toUpperCase(); // Converter para maiúsculas enquanto digita
+        });
+    });
+</script>
+    
 </head>
 <body>
     <h1>Consulta de Dados METAR - RedeMET</h1>
